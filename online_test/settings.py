@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     # 3rd-party
     'rest_framework',
     # internal
-    
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +84,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "account.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
