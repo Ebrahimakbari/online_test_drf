@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,8 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd-party
     'rest_framework',
+    'djoser',
+    'rest_framework_simplejwt',
     # internal
     'account',
+    'authentication',
+    'exam',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +131,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+JWT_AUDIENCE =config("JWT_AUDIENCE")
+JWT_ISSUER =config("JWT_ISSUER")
+JWT_SECRET =config("JWT_SECRET")
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
+    'ROTATE_REFRESH_TOKENS': True,
+
+    'SIGHING_KEY': JWT_SECRET,
+    'AUDIENCE': JWT_AUDIENCE,
+    'ISSUER': JWT_ISSUER,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'sub',
+}
+
+
+DJOSER = {
+    'SERIALIZERS':{
+        'user_create':'authentication.serializers.UserCreationSerializer'
+    }
+}
