@@ -45,3 +45,7 @@ class User(AbstractBaseUser):
     @property
     def is_student(self):
         return self.role == choices.USER_ROLE_STUDENT
+    
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
